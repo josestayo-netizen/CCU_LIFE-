@@ -5,7 +5,7 @@ typedef struct {
     Rectangle area;
     Color color;
     const char *name;
-    bool isInteractable; 
+    bool isInteractable;
 } Building;
 
 int main() {
