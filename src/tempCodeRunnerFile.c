@@ -1,1 +1,1 @@
-gcc main.c -o ../CCU_LIFE.exe -I ../Include libraylib.a -lopengl32 -lgdi32 -lwinmm
+andreas.score

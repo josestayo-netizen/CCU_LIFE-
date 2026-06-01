@@ -15,9 +15,9 @@ typedef struct {
 // Ini akan merapikan loop di main.c
 void DrawBuildings(Building *b, int count) {
     for (int i = 0; i < count; i++) {
-        DrawRectangleRec(b[i].area, b[i].color);
+        //DrawRectangleRec(b[i].area, b[i].color);
         // Gambar nama gedung sedikit di atas atau di dalam gedung
-        DrawText(b[i].name, b[i].area.x + 5, b[i].area.y + 5, 18, BLACK);
+        //DrawText(b[i].name, b[i].area.x + 5, b[i].area.y + 5, 18, BLACK);
     }
 }
 

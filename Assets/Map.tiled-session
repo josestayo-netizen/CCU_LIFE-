@@ -1,0 +1,65 @@
+{
+    "activeFile": "map.tmx",
+    "expandedProjectPaths": [
+        "."
+    ],
+    "fileStates": {
+        "Assets (1).tsx": {
+            "scaleInDock": 2,
+            "scaleInEditor": 1
+        },
+        "Houses Sprite Sheet.tsx": {
+            "scaleInDock": 3,
+            "scaleInEditor": 1
+        },
+        "Tiny World Tiles.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 4
+        },
+        "Trees.tsx": {
+            "scaleInDock": 1,
+            "scaleInEditor": 1
+        },
+        "assets.tsx": {
+            "scaleInDock": 1.5,
+            "scaleInEditor": 2
+        },
+        "map.tmx": {
+            "scale": 1.5,
+            "selectedLayer": 1,
+            "viewCenter": {
+                "x": 642.3333333333333,
+                "y": 585.6666666666666
+            }
+        }
+    },
+    "last.imagePath": "C:/Users/JOSES/Downloads",
+    "map.height": 120,
+    "map.lastUsedFormat": "tmx",
+    "map.tileHeight": 16,
+    "map.tileWidth": 16,
+    "map.width": 120,
+    "openFiles": [
+        "map.tmx",
+        "Tiny World Tiles.tsx",
+        "assets.tsx",
+        "Houses Sprite Sheet.tsx",
+        "Assets (1).tsx"
+    ],
+    "project": "Map.tiled-project",
+    "recentFiles": [
+        "Assets (1).tsx",
+        "Houses Sprite Sheet.tsx",
+        "assets.tsx",
+        "Tiny World Tiles.tsx",
+        "map.tmx",
+        "Trees.tsx"
+    ],
+    "tileset.lastUsedFormat": "tsx",
+    "tileset.margin": 0,
+    "tileset.spacing": 0,
+    "tileset.tileSize": {
+        "height": 16,
+        "width": 16
+    }
+}

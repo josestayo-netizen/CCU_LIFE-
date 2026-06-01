@@ -34,7 +34,7 @@ typedef struct {
 void InitPlayer(Player *p) {
     p->position = (Vector2){ 400, 300 }; // Contoh posisi awal di Dorm [cite: 16]
     p->speed = 2.0f; 
-    p->energy = 100.0f;
+    p->energy = 50.0f;
     p->stress = 0.0f;
     p->score = 0; 
     p->currentDay = 1; 
