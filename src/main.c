@@ -5,7 +5,7 @@
 #include "ui.h"
 #include "mini_games.h"
 #include <math.h>
-#include <stdlib.h> // Untuk rand() dan atoi()
+#include <stdlib.h> 
 
 MiniScreen currentMiniScreen = MINI_NONE;
 MathGame mathGame;
@@ -45,7 +45,7 @@ void UpdateStory() {
         else if (storyIndex == 2) currentDialogue = "GOOD LUCK ON YOUR FINAL EXAM !";
         else { currentState = STATE_EXPLORING; storyIndex = 0; }
     }
-} // <-- (Selesai Perbaikan Masalah 1: Kurung penutup fungsi UpdateStory sekarang sudah ada)
+} 
 
 int main() {
     int screenWidth = 1280; 
@@ -53,6 +53,7 @@ int main() {
 
     SetConfigFlags(FLAG_WINDOW_RESIZABLE | FLAG_MSAA_4X_HINT); 
     InitWindow(screenWidth, screenHeight, "CCU LIFE - Andreas Adventure");
+    SetExitKey(KEY_GRAVE);
     const int targetWidth = 1280;
     const int targetHeight = 720;
     Texture2D backgroundMap = LoadTexture("map.png");
@@ -66,9 +67,7 @@ int main() {
     andreas.position = (Vector2){ 824.0f, 1712.0f };
 
     Building buildings[] = {
-        // Format: {{ X, Y, Lebar, Tinggi }, WARNA, "Nama_Gedung", true}
         
-        // 1. Dormitory (Asrama - tempat start point Andreas)
         {{ 750, 1500, 150, 150 }, BROWN, "Dormitory", true},
         
         // 2. College Of Science
@@ -88,12 +87,16 @@ int main() {
     SetTargetFPS(60);
     InitAudioDevice();
     Music gameMusic = LoadMusicStream("bgm.mp3");
-    SetMusicVolume(gameMusic, 0.5f);
+    SetMusicVolume(gameMusic, 0.3f);
     Music minigameMusic = LoadMusicStream("minigame.mp3"); // Siapkan file .mp3 baru
-    SetMusicVolume(minigameMusic, 0.5f);
+    SetMusicVolume(minigameMusic, 0.3f);
     Sound fxFootstep = LoadSound("foot.mp3");
     SetSoundVolume(fxFootstep, 0.5f);
     PlayMusicStream(gameMusic);
+    Sound fxSelect = LoadSound("selection.mp3");
+    SetSoundVolume(fxSelect, 1.0f);
+
+
 
     Camera2D camera = { 0 };
     camera.target = andreas.position;
@@ -103,17 +106,16 @@ int main() {
 
     Texture2D seniorPortrait = LoadTexture("Seniorstudent.png");
     
-    float frameWidth =64.0f;  // Lebar 1 kotak karakter
-    float frameHeight = 64.0f; // Tinggi 1 kotak karakter
+    float frameWidth =64.0f;  
+    float frameHeight = 64.0f; 
 
-    int directionRow = 2;      // Default: Baris 2 (Hadap Depan) saat game mulai
-    int currentFrame = 0;      // Kolom frame (0 atau 1)
+    int directionRow = 2;      
+    int currentFrame = 0;      
     int frameCounter = 0;
 
 
 
     while (!WindowShouldClose()) {
-        // --- 1. UPDATE LOGIC ---
         Vector2 oldPosition = andreas.position;
         screenWidth = GetScreenWidth();
         screenHeight = GetScreenHeight();
@@ -121,7 +123,6 @@ int main() {
         UpdateMusicStream(gameMusic);
         UpdateMusicStream(minigameMusic);
 
-        // Perbaikan Masalah 2: Logika isSleepingEnding dibungkus dengan benar
         if (isSleepingEnding) {
             andreas.speed = 0; 
             if (endingFadeAlpha < 1.0f) {
@@ -136,14 +137,15 @@ int main() {
     
         if (currentState == STATE_MAIN_MENU) {
             if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_SPACE)) {
+                PlaySound(fxSelect); 
                 currentState = STATE_DIALOG;
                 storyIndex = 0;
             }
         }
-        else if (currentState == STATE_DIALOG) { // Menggunakan else if agar struktur logika lurus
+        else if (currentState == STATE_DIALOG) { 
             if (IsKeyPressed(KEY_SPACE) || IsKeyPressed(KEY_ENTER)) {
-                storyIndex++;
-            }
+                PlaySound(fxSelect); 
+                storyIndex++;}
             UpdateStory(); 
         }
         else if (currentState == STATE_EXPLORING) {
@@ -160,27 +162,20 @@ int main() {
             PlaySound(fxFootstep);
         }
         } else {
-        // Jika Andreas berhenti jalan, langsung matikan suara langkahnya instan
         StopSound(fxFootstep);
 
-        }
-        
-        // --- LOGIKA ANIMASI ALTERNATIF FRAME (KIRIMAN KAMU ADA 2 KOLOM) ---
-        frameCounter++;
-        if (frameCounter >= 30) { // Setiap 30 frame (sekitar 0.5 detik), ganti pose kaki/napas
+        } frameCounter++;
+        if (frameCounter >= 30) { 
         frameCounter = 0;
-        currentFrame = (currentFrame + 1) % 2; // Bolak-balik antara Kolom 0 dan Kolom 1
+        currentFrame = (currentFrame + 1) % 2; 
         }
             if (andreas.stress < 0.0f) andreas.stress = 0.0f;
         }
-
-        // Collision & Interaction Detection
         for (int i = 0; i < buildingCount; i++) {
             if (CheckCollisionCircleRec(andreas.position, 20, buildings[i].area)) {
                 andreas.position = oldPosition;
                 break; 
-            }
-        }
+            }}
 
         int buildingActive = GetNearbyBuilding(andreas.position, buildings, buildingCount);
         camera.target = andreas.position;
@@ -192,14 +187,15 @@ int main() {
 
         // LOGIKA DALAM MENU
         if (currentState == STATE_MENU) {
-            if (IsKeyPressed(KEY_BACKSPACE)) {
+            if (IsKeyPressed(KEY_ESCAPE)) {
                 currentState = STATE_EXPLORING;
             }
 
             if (buildingActive == 0 && IsKeyPressed(KEY_ONE)) {
+                PlaySound(fxSelect);
                 currentDay++;
                 andreas.energy += 10.0f; 
-                andreas.stress -= 5.0f; 
+                andreas.stress -= 20.0f; 
                 if (andreas.stress < 0.0f) andreas.stress = 0.0f;
                 andreas.missions.classAttended = false;
                 andreas.missions.assignmentsDone = false;
@@ -210,6 +206,7 @@ int main() {
             }     
 
             if (buildingActive == 2 && IsKeyPressed(KEY_ONE)) {
+                PlaySound(fxSelect); 
                 andreas.energy += 10.0f;
                 andreas.stress -= 10.0f; 
                 andreas.score -= 1.0f;
@@ -218,12 +215,14 @@ int main() {
             }
 
             if (buildingActive == 1 && IsKeyPressed(KEY_ONE)) {
+                PlaySound(fxSelect); 
                 triggerMissionType = 1;      
                 StartMathGame();             
                 currentState = STATE_MINIGAME; 
             }
 
             if (buildingActive == 3 && IsKeyPressed(KEY_ONE)) {
+                PlaySound(fxSelect); 
                 triggerMissionType = 4; 
                 StartMissionGame();
                 currentState = STATE_MINIGAME;
@@ -232,6 +231,7 @@ int main() {
             if (buildingActive == 4) {
                 if (currentDay == 1) {
                     if (IsKeyPressed(KEY_TWO)) {
+                        PlaySound(fxSelect); 
                         triggerMissionType = 2; 
                         StartEnglishGame();     
                         currentState = STATE_MINIGAME; 
@@ -239,6 +239,7 @@ int main() {
                 } 
                 else {
                     if (IsKeyPressed(KEY_ONE)) {
+                        PlaySound(fxSelect); 
                         triggerMissionType = 3; 
                         StartMandarinGame();    
                         currentState = STATE_MINIGAME; 
@@ -256,7 +257,7 @@ int main() {
             timeMultiplier = 1.5f; }
             float modifiedDt = dt * timeMultiplier;
             
-            if (IsKeyPressed(KEY_BACKSPACE) && currentMiniScreen != MINI_RESULT) {
+            if (IsKeyPressed(KEY_ESCAPE) && currentMiniScreen != MINI_RESULT) {
                 currentState = STATE_MENU; 
             }
 
@@ -298,7 +299,6 @@ int main() {
                             nextWord = rand() % EnglishCount();
                         }
                         englishGame.current = nextWord; 
-    
                         englishGame.input[0] = '\0'; 
                         englishGame.inputLen = 0;
                     }
@@ -342,12 +342,11 @@ int main() {
                 }
             }
             else if (currentMiniScreen == MINI_RESULT) {
-                if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_BACKSPACE)) { 
+                if (IsKeyPressed(KEY_ENTER) || IsKeyPressed(KEY_ESCAPE)) { 
 
                     int pointsEarned = 0;
         
                     if (triggerMissionType == 1) {
-                    // Contoh: Setiap soal matematika yang benar dikali 2 poin
                     pointsEarned = mathGame.base.score * 2; 
                     } 
                     else if (triggerMissionType == 2) {
@@ -360,14 +359,12 @@ int main() {
                     pointsEarned = missionGame.base.score * 2;
                     }
                     if (triggerMissionType == 1) {
-                     // Skor hanya bertambah kalau Andreas belum pernah menghadiri kelas hari ini
                     if (!andreas.missions.classAttended) {
                     andreas.score += pointsEarned;
                     }
                     andreas.missions.classAttended = true; 
                     } 
                     else if (triggerMissionType == 2 || triggerMissionType == 3 || triggerMissionType == 4) {
-                    // Skor hanya bertambah kalau tugas hari ini belum selesai
                     if (!andreas.missions.assignmentsDone) {
                     andreas.score += pointsEarned;
                     }
@@ -391,15 +388,31 @@ int main() {
         andreas.isBlurry = (andreas.stress > 50.0f || andreas.energy < 30.0f);
         float scale = fminf((float)screenWidth / targetWidth, (float)screenHeight / targetHeight);
 
-        // --- 2. DRAWING LOGIC ---
         BeginTextureMode(target);
         ClearBackground(RAYWHITE);
 
         if (currentState == STATE_MAIN_MENU) {
-            DrawText("CCU LIFE", targetWidth / 2 - 150, targetHeight / 2 - 100, 60, DARKBLUE);
-            DrawText("A Student Adventure", targetWidth / 2 - 160, targetHeight / 2 - 30, 25, DARKGRAY);
-            DrawText("Press [ENTER] or [SPACE] to Start", targetWidth / 2 - 200, targetHeight / 2 + 100, 20, BLACK);
-            DrawText("Created by Group 3", 20, targetHeight - 40, 20, GRAY);
+
+            DrawRectangleGradientV(0, 0, targetWidth, targetHeight, DARKBLUE, BLACK);
+            for (int i = 0; i < targetWidth; i += 40) {
+                DrawLine(i, 0, i, targetHeight, Fade(BLUE, 0.05f));
+            }
+            for (int j = 0; j < targetHeight; j += 40) {
+                DrawLine(0, j, targetWidth, j, Fade(BLUE, 0.05f));
+            }
+            DrawRectangleLinesEx((Rectangle){ 20, 20, targetWidth - 40, targetHeight - 40 }, 3, Fade(SKYBLUE, 0.3f));
+            DrawText("CCU LIFE", targetWidth / 2 - 177, targetHeight / 2 - 137, 70, Fade(BLACK, 0.5f));
+            DrawText("CCU LIFE", targetWidth / 2 - 180, targetHeight / 2 - 140, 70, SKYBLUE);
+            DrawText("A College Student Simulator Adventure", targetWidth / 2 - 220, targetHeight / 2 - 50, 22, LIGHTGRAY);
+            float blink = (sinf(GetTime() * 4.0f) + 1.0f) / 2.0f; 
+            Color pressEnterColor = Fade(WHITE, 0.3f + (blink * 0.7f)); 
+            DrawRectangle(targetWidth / 2 - 250, targetHeight / 2 + 65, 500, 50, Fade(BLUE, 0.6f));
+            DrawRectangleLines((targetWidth / 2 - 250), targetHeight / 2 + 65, 500, 50, Fade(SKYBLUE, 0.5f));
+            DrawCenteredText("PRESS [ENTER] OR [SPACE] TO START", targetHeight / 2 + 80, 22, pressEnterColor);
+            DrawRectangle(targetWidth / 2 - 300, targetHeight - 120, 600, 35, Fade(BLACK, 0.4f));
+            DrawCenteredText("Controls: [W][A][S][D] to Move  |  [E] to Interact  |  [ESCAPE] to Exit Menu", targetHeight - 110, 16, GRAY);
+            DrawText("Created by FCJ", 40, targetHeight - 50, 18, DARKGRAY);
+            DrawText("v1.0 (Raylib Edition)", targetWidth - 200, targetHeight - 50, 18, DARKGRAY);
         } 
         else if (currentState == STATE_MINIGAME) {
 
@@ -466,24 +479,17 @@ int main() {
         else {
 
             if (IsMusicStreamPlaying(minigameMusic)) {
-                StopMusicStream(minigameMusic);   // Matikan musik mini-game
+                StopMusicStream(minigameMusic);   
             }
             if (!IsMusicStreamPlaying(gameMusic) && currentState != STATE_MAIN_MENU) {
-                PlayMusicStream(gameMusic);       // Nyalakan lagi musik eksplorasi
+                PlayMusicStream(gameMusic);       
             }
-
             BeginMode2D(camera);
                 DrawTextureEx(backgroundMap, (Vector2){ 0, 0 }, 0.0f, 2.0f, WHITE);
                 DrawBuildings(buildings, buildingCount); 
-                //DrawCircleV(andreas.position, 20, BLUE);
                 Rectangle sourceRec = { (float)currentFrame * frameWidth, (float)directionRow * frameHeight, frameWidth, frameHeight};
-    
                 Rectangle destRec = { andreas.position.x, andreas.position.y, frameWidth * 1.0f, frameHeight * 1.0f };
-    
-                // Set titik poros di tengah bawah kaki karakter
                 Vector2 origin = { (frameWidth * 1.0f) / 2, (frameHeight * 1.0f) / 2 };
-    
-                // Gambar si Andreas!
                 DrawTexturePro(andreasTexture, sourceRec, destRec, origin, 0.0f, WHITE);
             EndMode2D();
 
@@ -520,7 +526,6 @@ int main() {
         
         EndTextureMode();
 
-        // --- 3. CANVAS RESIZING / SCREEN OUTPUT ---
         BeginDrawing();
             ClearBackground(BLACK);
             DrawTexturePro(
@@ -537,12 +542,12 @@ int main() {
             
         EndDrawing();
     } 
-
     UnloadRenderTexture(target);
     UnloadTexture(backgroundMap);
     UnloadTexture(seniorPortrait);
     UnloadTexture(andreasTexture);
-    UnloadSound(fxFootstep);
+    UnloadSound(fxFootstep);    
+    UnloadSound(fxSelect);
     CloseAudioDevice();
     CloseWindow();
     return 0;

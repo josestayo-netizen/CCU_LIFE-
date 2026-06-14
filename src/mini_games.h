@@ -30,7 +30,6 @@ typedef struct { TaskBase base; int current; } MandarinGame;
 typedef struct { const char *answer; const char *scramble; const char *hint; } EnglishWord;
 typedef struct { TaskBase base; int current; char input[MAX_INPUT]; int inputLen; } EnglishGame;
 
-// ── STRUCT BARU UNTUK GENERAL SUBJECT QUIZ ──
 typedef struct {
     const char *question;
     const char *options[4];
@@ -51,12 +50,11 @@ typedef struct {
 } MissionGame;
 
 
-// Variabel Global Modul Mini-Game
 extern MiniScreen currentMiniScreen;
 extern MathGame mathGame;
 extern MandarinGame mandarinGame;
 extern EnglishGame englishGame;
-extern MissionGame missionGame; // <-- Tambahkan extern ini agar bisa dibaca main.c
+extern MissionGame missionGame; 
 extern char lastGameTitle[64];
 extern int lastScore;
 extern int lastTotal;
@@ -112,7 +110,7 @@ static EnglishWord englishWords[] = {
     {"campus", "supmac", "A school building area"},
     {"cafeteria", "airetefac", "A place to eat food"},
     {"quiz", "ziuq", "A short test"},
-    {"assistant", "tnatsissa", "A teacher’s helper"},
+    {"assistant", "tnatsissa", "A teacher's helper"},
     {"instruction", "noitcurtsni", "A thing students must follow"},
     {"classmate", "etamssalc", "A person in the same class"},
     {"gymnasium", "muisanmyg", "A place for sports"},
@@ -123,7 +121,6 @@ static EnglishWord englishWords[] = {
     {"mission", "noissim", "A goal or task in a game"}
 };
 
-// ── DATA PERTANYAAN BARU UNTUK GENERAL SUBJECT QUIZ ──
 #define MAX_MISSION_QUESTIONS 5
 static MissionQuestion missionQuestions[MAX_MISSION_QUESTIONS] = {
     {"What is the capital city of Indonesia?", {"Bandung", "Jakarta", "Surabaya", "Medan"}, 1},
@@ -152,6 +149,7 @@ static inline int EqualsIgnoreCase(const char *a, const char *b) {
 
 static inline void FinishTask(const char *title, TaskBase base) {
     strncpy(lastGameTitle, title, sizeof(lastGameTitle) - 1);
+    lastGameTitle[sizeof(lastGameTitle) - 1] = '\0';
     lastScore = base.score;
     lastTotal = base.total;
     currentMiniScreen = MINI_RESULT;
@@ -189,10 +187,9 @@ static inline void StartMathGame(void) { ResetBase(&mathGame.base); GenerateMath
 static inline void StartMandarinGame(void) { ResetBase(&mandarinGame.base); mandarinGame.current = rand() % MandarinCount(); currentMiniScreen = MINI_MANDARIN; }
 static inline void StartEnglishGame(void) { ResetBase(&englishGame.base); englishGame.current = rand() % EnglishCount(); englishGame.input[0] = '\0'; englishGame.inputLen = 0; currentMiniScreen = MINI_ENGLISH; }
 
-// ── FUNGSI START BARU UNTUK MISSION GAME ──
 static inline void StartMissionGame(void) {
     ResetBase(&missionGame.base);
-    missionGame.base.timeLeft   = TASK_TIME * 2.0f; // Diberi waktu 60 detik (karena membaca soal butuh waktu lebih lama)
+    missionGame.base.timeLeft   = TASK_TIME * 2.0f; 
     missionGame.phase           = MISSION_PLAYING;
     missionGame.currentQuestion = 0;
     missionGame.selectedOption  = 0;
@@ -225,7 +222,6 @@ static inline void DrawHeader(const char *title, TaskBase base) {
     DrawText(TextFormat("Time: %02d", (int)base.timeLeft), 1000, 20, 26, RAYWHITE);
     DrawText(TextFormat("Score: %d/%d", base.score, base.total), 1000, 50, 20, LIGHTGRAY);
     float barWidth = 1220.0f * (base.timeLeft / TASK_TIME);
-    // Batasi barWidth agar tidak menggambar bar minus/melebihi batas jika waktu dikali 2
     if (barWidth > 1220.0f) barWidth = 1220.0f;
     DrawRectangle(30, 86, 1220, 12, LIGHTGRAY);
     DrawRectangle(30, 86, (int)barWidth, 12, SKYBLUE);
