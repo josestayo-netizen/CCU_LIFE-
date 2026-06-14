@@ -74,14 +74,12 @@ void DrawLanguageCenterMenu(int screenWidth, int screenHeight, int day) {
    DrawPopUpBase(screenWidth, screenHeight, "LANGUAGE CENTER");
     int startX = screenWidth/2 - 210;
     int startY = screenHeight/2 - 60;
-
     if (day == 1) {
         DrawText("2. Study English Word Scramble", startX, startY, 20, DARKBLUE);
     } 
     else {
         DrawText("1. Study Mandarin Pinyin", startX, startY, 20, DARKBLUE);
     }
-    
     DrawText("Press [BACKSPACE] to Exit", startX, startY + 160, 15, GRAY);
 }
 
@@ -96,9 +94,7 @@ void DrawCSIEMenu(int screenWidth, int screenHeight) {
     DrawPopUpBase(screenWidth, screenHeight, "CSIE DEPARTMENT");
     int startX = screenWidth/2 - 210;
     int startY = screenHeight/2 - 60;
-
     DrawText("1. Attend Calculus Class", startX, startY, 20, DARKBLUE);
-    
     DrawText("Press [BACKSPACE] to Exit", startX, startY + 160, 15, GRAY);
 }
 
@@ -106,9 +102,7 @@ void DrawGeneralMenu(int screenWidth, int screenHeight) {
     DrawPopUpBase(screenWidth, screenHeight, "General Building");
     int startX = screenWidth/2 - 210;
     int startY = screenHeight/2 - 60;
-
     DrawText("1. General Class", startX, startY, 20, DARKBLUE);
-    
     DrawText("Press [BACKSPACE] to Exit", startX, startY + 160, 15, GRAY);
 }
 

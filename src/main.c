@@ -70,16 +70,16 @@ int main() {
         
         {{ 750, 1500, 150, 150 }, BROWN, "Dormitory", true},
         
-        // 2. College Of Science
+        // College Of Science
         {{ 1444, 1252, 150, 150 }, GRAY, "College Of Science", true},
         
-        // 3. Cafeteria
+        // Cafeteria
         {{ 1992, 1514, 150, 150 }, ORANGE, "Cafeteria", true},
         
-        // 4. General Building
+        // General Building
         {{ 2042, 970, 150, 150 }, BLUE, "General Building", true},
         
-        // 5. Language Center
+        // Language Center
         {{ 1008, 976, 150, 150 }, GREEN, "Language Center", true},
     };
     int buildingCount = 5;
@@ -88,7 +88,7 @@ int main() {
     InitAudioDevice();
     Music gameMusic = LoadMusicStream("bgm.mp3");
     SetMusicVolume(gameMusic, 0.3f);
-    Music minigameMusic = LoadMusicStream("minigame.mp3"); // Siapkan file .mp3 baru
+    Music minigameMusic = LoadMusicStream("minigame.mp3"); 
     SetMusicVolume(minigameMusic, 0.3f);
     Sound fxFootstep = LoadSound("foot.mp3");
     SetSoundVolume(fxFootstep, 0.5f);
@@ -151,10 +151,10 @@ int main() {
         else if (currentState == STATE_EXPLORING) {
         bool isMoving = false;
 
-        if (IsKeyDown(KEY_W)) { andreas.position.y -= andreas.speed; directionRow = 0; isMoving = true; } // Baris 0
-        if (IsKeyDown(KEY_A)) { andreas.position.x -= andreas.speed; directionRow = 1; isMoving = true; } // Baris 1
-        if (IsKeyDown(KEY_S)) { andreas.position.y += andreas.speed; directionRow = 2; isMoving = true; } // Baris 2
-        if (IsKeyDown(KEY_D)) { andreas.position.x += andreas.speed; directionRow = 3; isMoving = true; } // Baris 3
+        if (IsKeyDown(KEY_W)) { andreas.position.y -= andreas.speed; directionRow = 0; isMoving = true; } 
+        if (IsKeyDown(KEY_A)) { andreas.position.x -= andreas.speed; directionRow = 1; isMoving = true; } 
+        if (IsKeyDown(KEY_S)) { andreas.position.y += andreas.speed; directionRow = 2; isMoving = true; } 
+        if (IsKeyDown(KEY_D)) { andreas.position.x += andreas.speed; directionRow = 3; isMoving = true; } 
 
         if (isMoving) {
         andreas.energy -= 0.01f; 
@@ -185,7 +185,6 @@ int main() {
             currentState = STATE_MENU;
         }
 
-        // LOGIKA DALAM MENU
         if (currentState == STATE_MENU) {
             if (IsKeyPressed(KEY_ESCAPE)) {
                 currentState = STATE_EXPLORING;
@@ -248,7 +247,6 @@ int main() {
             }
         }   
 
-        // LOGIKA KONTROL INPUT MINI-GAME
         if (currentState == STATE_MINIGAME) {
             float timeMultiplier = 1.0f;
             if (andreas.stress > 40.0f) {
@@ -540,8 +538,7 @@ int main() {
                 WHITE
             );
             
-        EndDrawing();
-    } 
+        EndDrawing();} 
     UnloadRenderTexture(target);
     UnloadTexture(backgroundMap);
     UnloadTexture(seniorPortrait);
